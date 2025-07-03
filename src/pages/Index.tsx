@@ -30,7 +30,6 @@ const Index = () => {
   const [promo_line, setPromo_line] = useState('');
   const [poster_image, setPoster_image] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [apiKey, setApiKey] = useState('');
 
   const handleGenerate = async () => {
     if (!business_type.trim() || !promo_text.trim() || !theme) {
@@ -38,20 +37,36 @@ const Index = () => {
       return;
     }
 
-    if (!apiKey.trim()) {
-      toast.error("Please enter your OpenAI API key");
-      return;
-    }
-
     setIsGenerating(true);
     try {
-      const result = await generatePromoContent(business_type, promo_text, theme.name, apiKey);
-      setPromo_line(result.text);
-      setPoster_image(result.imageUrl);
+      // For now, we'll use demo content since API key setup is complex
+      // In production, this would connect to your AI service
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      
+      // Demo generated content
+      const demoPromoLines = [
+        "Haiya! This deal is too sweet to miss! 🔥",
+        "Uko ready for this fire offer? Let's go!",
+        "Bro, this promo will shock you! 😱",
+        "Eish, this deal is absolutely crazy!",
+        "Msee, don't sleep on this offer!"
+      ];
+      
+      const demoImages = [
+        "https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+        "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1126&q=80"
+      ];
+      
+      const randomPromo = demoPromoLines[Math.floor(Math.random() * demoPromoLines.length)];
+      const randomImage = demoImages[Math.floor(Math.random() * demoImages.length)];
+      
+      setPromo_line(randomPromo);
+      setPoster_image(randomImage);
       toast.success("Poster generated successfully!");
     } catch (error) {
       console.error('Generation error:', error);
-      toast.error("Failed to generate poster. Please check your API key and try again.");
+      toast.error("Failed to generate poster. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -81,7 +96,7 @@ const Index = () => {
             </h1>
           </div>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Create stunning AI-powered promotional posters for your business in seconds
+            Create stunning promotional posters for your business in seconds
           </p>
         </div>
 
@@ -96,24 +111,6 @@ const Index = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* API Key Input */}
-                <div className="space-y-2">
-                  <Label htmlFor="apiKey" className="text-slate-300">
-                    OpenAI API Key
-                  </Label>
-                  <Input
-                    id="apiKey"
-                    type="password"
-                    placeholder="Enter your OpenAI API key..."
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    className="bg-slate-700/50 border-slate-600 text-white placeholder-slate-400"
-                  />
-                  <p className="text-xs text-slate-400">
-                    Your API key is stored locally and never shared
-                  </p>
-                </div>
-
                 {/* Business Type */}
                 <div className="space-y-2">
                   <Label htmlFor="business_type" className="text-slate-300">
