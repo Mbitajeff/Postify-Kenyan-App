@@ -5,14 +5,15 @@ interface PromoContent {
 }
 
 export const generatePromoContent = async (
-  businessType: string,
-  promoOffer: string,
+  business_type: string,
+  promo_text: string,
+  theme: string,
   apiKey: string
 ): Promise<PromoContent> => {
   console.log('Starting AI content generation...');
   
   try {
-    // Generate promotional text using GPT
+    // Generate promotional text using GPT with Kenyan Gen Z tone
     const textResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -24,14 +25,14 @@ export const generatePromoContent = async (
         messages: [
           {
             role: 'system',
-            content: 'You are a creative marketing copywriter. Create catchy, engaging promotional text that is concise and impactful for social media posters. Keep it under 25 words and make it exciting.'
+            content: 'You are a creative marketing copywriter with a youthful, hype Kenyan tone. Think Gen Z energy. Write short, catchy promo lines that are bold and authentic. Avoid clichés. Keep responses under 15 words.'
           },
           {
             role: 'user',
-            content: `Create a catchy promotional line for a ${businessType} business offering: ${promoOffer}`
+            content: `Write a short, catchy promo line for a ${business_type} offering this promo: "${promo_text}". Keep it under 15 words. Use a youthful, hype Kenyan tone — think Gen Z energy. Avoid clichés. Sound bold and authentic.`
           }
         ],
-        max_tokens: 100,
+        max_tokens: 50,
         temperature: 0.8,
       }),
     });
@@ -41,11 +42,11 @@ export const generatePromoContent = async (
     }
 
     const textData = await textResponse.json();
-    const generatedText = textData.choices[0]?.message?.content?.trim() || 'Amazing offer awaits you!';
+    const promo_line = textData.choices[0]?.message?.content?.trim() || 'Amazing offer awaits you!';
     
-    console.log('Generated text:', generatedText);
+    console.log('Generated promo_line:', promo_line);
 
-    // Generate background image using DALL-E
+    // Generate background image using DALL-E with Kenya context
     const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
@@ -54,7 +55,7 @@ export const generatePromoContent = async (
       },
       body: JSON.stringify({
         model: 'dall-e-3',
-        prompt: `Create a beautiful, modern background for a ${businessType} promotional poster. The image should be vibrant, professional, and suitable as a background (not too busy). Style: modern, clean, appealing, commercial photography aesthetic. No text or words in the image.`,
+        prompt: `High-quality poster background for a ${business_type} in Kenya. Style: ${theme}. Clean, aesthetic, no text. Vibrant, modern, professional background suitable for promotional poster.`,
         n: 1,
         size: '1024x1024',
         quality: 'standard',
@@ -66,17 +67,17 @@ export const generatePromoContent = async (
     }
 
     const imageData = await imageResponse.json();
-    const imageUrl = imageData.data[0]?.url;
+    const poster_image = imageData.data[0]?.url;
 
-    if (!imageUrl) {
+    if (!poster_image) {
       throw new Error('No image URL received from DALL-E');
     }
 
-    console.log('Generated image URL:', imageUrl);
+    console.log('Generated poster_image URL:', poster_image);
 
     return {
-      text: generatedText,
-      imageUrl: imageUrl
+      text: promo_line,
+      imageUrl: poster_image
     };
 
   } catch (error) {

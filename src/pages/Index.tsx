@@ -24,16 +24,16 @@ interface Theme {
 }
 
 const Index = () => {
-  const [businessType, setBusinessType] = useState('');
-  const [promoOffer, setPromoOffer] = useState('');
-  const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
-  const [generatedText, setGeneratedText] = useState('');
-  const [generatedImage, setGeneratedImage] = useState('');
+  const [business_type, setBusiness_type] = useState('');
+  const [promo_text, setPromo_text] = useState('');
+  const [theme, setTheme] = useState<Theme | null>(null);
+  const [promo_line, setPromo_line] = useState('');
+  const [poster_image, setPoster_image] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [apiKey, setApiKey] = useState('');
 
   const handleGenerate = async () => {
-    if (!businessType.trim() || !promoOffer.trim() || !selectedTheme) {
+    if (!business_type.trim() || !promo_text.trim() || !theme) {
       toast.error("Please fill in all fields and select a theme");
       return;
     }
@@ -45,9 +45,9 @@ const Index = () => {
 
     setIsGenerating(true);
     try {
-      const result = await generatePromoContent(businessType, promoOffer, apiKey);
-      setGeneratedText(result.text);
-      setGeneratedImage(result.imageUrl);
+      const result = await generatePromoContent(business_type, promo_text, theme.name, apiKey);
+      setPromo_line(result.text);
+      setPoster_image(result.imageUrl);
       toast.success("Poster generated successfully!");
     } catch (error) {
       console.error('Generation error:', error);
@@ -58,12 +58,11 @@ const Index = () => {
   };
 
   const handleDownload = () => {
-    if (!generatedText || !generatedImage) {
+    if (!promo_line || !poster_image) {
       toast.error("Please generate a poster first");
       return;
     }
     
-    // This will be implemented in the PosterPreview component
     const event = new CustomEvent('downloadPoster');
     window.dispatchEvent(event);
   };
@@ -117,28 +116,28 @@ const Index = () => {
 
                 {/* Business Type */}
                 <div className="space-y-2">
-                  <Label htmlFor="businessType" className="text-slate-300">
+                  <Label htmlFor="business_type" className="text-slate-300">
                     Business Type
                   </Label>
                   <Input
-                    id="businessType"
+                    id="business_type"
                     placeholder="e.g., Restaurant, Gym, Salon, Tech Startup..."
-                    value={businessType}
-                    onChange={(e) => setBusinessType(e.target.value)}
+                    value={business_type}
+                    onChange={(e) => setBusiness_type(e.target.value)}
                     className="bg-slate-700/50 border-slate-600 text-white placeholder-slate-400"
                   />
                 </div>
 
-                {/* Promo Offer */}
+                {/* Promo Text */}
                 <div className="space-y-2">
-                  <Label htmlFor="promoOffer" className="text-slate-300">
-                    Promotional Offer
+                  <Label htmlFor="promo_text" className="text-slate-300">
+                    Promo Text
                   </Label>
                   <Textarea
-                    id="promoOffer"
+                    id="promo_text"
                     placeholder="e.g., 50% off first month, Buy 1 Get 1 Free, Free consultation..."
-                    value={promoOffer}
-                    onChange={(e) => setPromoOffer(e.target.value)}
+                    value={promo_text}
+                    onChange={(e) => setPromo_text(e.target.value)}
                     className="bg-slate-700/50 border-slate-600 text-white placeholder-slate-400 min-h-[100px]"
                   />
                 </div>
@@ -146,7 +145,7 @@ const Index = () => {
                 {/* Theme Selection */}
                 <div className="space-y-2">
                   <Label className="text-slate-300">Choose Theme</Label>
-                  <ThemeSelector onThemeSelect={setSelectedTheme} />
+                  <ThemeSelector onThemeSelect={setTheme} />
                 </div>
 
                 {/* Generate Button */}
@@ -162,8 +161,7 @@ const Index = () => {
                     </>
                   ) : (
                     <>
-                      <Wand2 className="w-5 h-5 mr-2" />
-                      Generate Poster
+                      🔥 Generate Poster
                     </>
                   )}
                 </Button>
@@ -177,7 +175,7 @@ const Index = () => {
               <CardHeader>
                 <CardTitle className="text-white flex items-center justify-between">
                   <span>Your Poster Preview</span>
-                  {generatedText && generatedImage && (
+                  {promo_line && poster_image && (
                     <Button
                       onClick={handleDownload}
                       variant="outline"
@@ -191,11 +189,11 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <PosterPreview
-                  businessType={businessType}
-                  promoOffer={promoOffer}
-                  theme={selectedTheme}
-                  generatedText={generatedText}
-                  generatedImage={generatedImage}
+                  business_type={business_type}
+                  promo_text={promo_text}
+                  theme={theme}
+                  promo_line={promo_line}
+                  poster_image={poster_image}
                   isGenerating={isGenerating}
                 />
               </CardContent>

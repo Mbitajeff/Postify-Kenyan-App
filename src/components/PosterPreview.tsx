@@ -15,27 +15,27 @@ interface Theme {
 }
 
 interface PosterPreviewProps {
-  businessType: string;
-  promoOffer: string;
+  business_type: string;
+  promo_text: string;
   theme: Theme | null;
-  generatedText: string;
-  generatedImage: string;
+  promo_line: string;
+  poster_image: string;
   isGenerating: boolean;
 }
 
 const PosterPreview: React.FC<PosterPreviewProps> = ({
-  businessType,
-  promoOffer,
+  business_type,
+  promo_text,
   theme,
-  generatedText,
-  generatedImage,
+  promo_line,
+  poster_image,
   isGenerating
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const handleDownload = () => {
-      if (canvasRef.current && generatedText && generatedImage) {
+      if (canvasRef.current && promo_line && poster_image) {
         const link = document.createElement('a');
         link.download = `postify-poster-${Date.now()}.png`;
         link.href = canvasRef.current.toDataURL();
@@ -45,10 +45,10 @@ const PosterPreview: React.FC<PosterPreviewProps> = ({
 
     window.addEventListener('downloadPoster', handleDownload);
     return () => window.removeEventListener('downloadPoster', handleDownload);
-  }, [generatedText, generatedImage]);
+  }, [promo_line, poster_image]);
 
   useEffect(() => {
-    if (canvasRef.current && theme && generatedText && generatedImage) {
+    if (canvasRef.current && theme && promo_line && poster_image) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
@@ -61,7 +61,7 @@ const PosterPreview: React.FC<PosterPreviewProps> = ({
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
-        // Draw background image
+        // Draw background image (poster_image)
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
         // Add gradient overlay
@@ -71,7 +71,7 @@ const PosterPreview: React.FC<PosterPreviewProps> = ({
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw text
+        // Draw promo_line text
         ctx.fillStyle = theme.colors.text;
         ctx.font = 'bold 48px Arial, sans-serif';
         ctx.textAlign = 'center';
@@ -80,8 +80,8 @@ const PosterPreview: React.FC<PosterPreviewProps> = ({
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
 
-        // Wrap and draw generated text
-        const words = generatedText.split(' ');
+        // Wrap and draw promo_line
+        const words = promo_line.split(' ');
         const lines = [];
         let currentLine = '';
         const maxWidth = canvas.width - 80;
@@ -103,9 +103,9 @@ const PosterPreview: React.FC<PosterPreviewProps> = ({
           ctx.fillText(line.trim(), canvas.width / 2, startY + (index * 60));
         });
       };
-      img.src = generatedImage;
+      img.src = poster_image;
     }
-  }, [theme, generatedText, generatedImage]);
+  }, [theme, promo_line, poster_image]);
 
   if (isGenerating) {
     return (
@@ -118,7 +118,7 @@ const PosterPreview: React.FC<PosterPreviewProps> = ({
     );
   }
 
-  if (!generatedText || !generatedImage || !theme) {
+  if (!promo_line || !poster_image || !theme) {
     return (
       <div className="aspect-[4/5] bg-slate-700/30 rounded-lg border-2 border-dashed border-slate-600 flex items-center justify-center">
         <div className="text-center text-slate-400">
@@ -143,15 +143,15 @@ const PosterPreview: React.FC<PosterPreviewProps> = ({
       <div className="space-y-2 text-sm">
         <div className="flex justify-between text-slate-300">
           <span>Business:</span>
-          <span className="font-medium">{businessType}</span>
+          <span className="font-medium">{business_type}</span>
         </div>
         <div className="flex justify-between text-slate-300">
           <span>Theme:</span>
           <span className="font-medium">{theme.name}</span>
         </div>
         <div className="text-slate-400 text-xs">
-          <span>Generated Text:</span>
-          <p className="mt-1 italic">"{generatedText}"</p>
+          <span>Promo Line:</span>
+          <p className="mt-1 italic">"{promo_line}"</p>
         </div>
       </div>
     </div>
