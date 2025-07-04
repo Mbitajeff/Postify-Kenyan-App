@@ -1,17 +1,4 @@
-🔥 Let’s gooo Jeff — deployed on Vercel and up on GitHub? You’re crushing it!
 
-Here's your updated **final `README.md`**, now including:
-
-* ✅ Your **live Vercel link**
-* ✅ Your **GitHub repo**
-* ✅ Clean credits
-* ✅ Ready to impress hackathon judges, investors, or anyone stumbling on your repo
-
----
-
-## ✅ FINAL `README.md` (copy this into your repo)
-
-````markdown
 # 🎨 Postify — AI-Powered Poster Maker for Hustlers
 
 **Postify** is a sleek AI web app that helps Kenyan hustlers, small businesses, and solopreneurs design stunning promotional posters in seconds — no design skills required.
@@ -92,8 +79,7 @@ npm run dev
 Create a `.env` file in the root folder:
 
 ```env
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_KEY=your_anon_public_key
+SUPABASE_URL=https://supabase.com/dashboard/project/szzdfxetrydgnrnugvrh
 ```
 
 ---
