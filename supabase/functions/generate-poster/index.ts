@@ -44,7 +44,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-3.5-turbo',
         messages: [
           {
             role: 'system',
@@ -64,7 +64,7 @@ serve(async (req) => {
       const errorText = await textResponse.text()
       console.error('OpenAI text generation failed:', textResponse.status, errorText)
       return new Response(
-        JSON.stringify({ error: `Failed to generate text: ${textResponse.status}` }),
+        JSON.stringify({ error: `Failed to generate text: ${textResponse.status} - ${errorText}` }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
       )
     }
@@ -73,45 +73,30 @@ serve(async (req) => {
     const generatedText = textData.choices?.[0]?.message?.content || 'Amazing offer awaits! 🔥'
 
     console.log('Generated text:', generatedText)
-    console.log('Generating image with DALL-E...')
 
-    // Generate image using OpenAI DALL-E
-    const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'dall-e-3',
-        prompt: `Create a professional promotional poster background for a ${business_type}. Modern, vibrant, eye-catching design with ${theme.name} color scheme (${theme.colors.primary}, ${theme.colors.secondary}). No text overlay, just beautiful background suitable for promotional content. High quality, commercial style.`,
-        n: 1,
-        size: '1024x1024',
-        quality: 'standard'
-      })
-    })
-
-    if (!imageResponse.ok) {
-      const errorText = await imageResponse.text()
-      console.error('OpenAI image generation failed:', imageResponse.status, errorText)
-      return new Response(
-        JSON.stringify({ error: `Failed to generate image: ${imageResponse.status}` }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-      )
+    // For free accounts, we'll create a simple gradient background instead of using DALL-E
+    // This creates a data URL for a simple gradient that matches the theme colors
+    const createGradientImage = (theme: any) => {
+      const canvas = `
+        <svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:${theme.colors.primary};stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:${theme.colors.secondary};stop-opacity:0.8" />
+            </linearGradient>
+          </defs>
+          <rect width="1024" height="1024" fill="url(#grad)" />
+          <circle cx="200" cy="200" r="100" fill="${theme.colors.accent}" opacity="0.3"/>
+          <circle cx="800" cy="800" r="150" fill="${theme.colors.accent}" opacity="0.2"/>
+          <rect x="100" y="500" width="824" height="4" fill="${theme.colors.accent}" opacity="0.5"/>
+        </svg>
+      `
+      return `data:image/svg+xml;base64,${btoa(canvas)}`
     }
 
-    const imageData = await imageResponse.json()
-    const imageUrl = imageData.data?.[0]?.url
+    const imageUrl = createGradientImage(theme)
 
-    if (!imageUrl) {
-      console.error('No image URL in response:', imageData)
-      return new Response(
-        JSON.stringify({ error: 'No image generated' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-      )
-    }
-
-    console.log('Successfully generated poster content')
+    console.log('Successfully generated poster content with gradient background')
 
     return new Response(
       JSON.stringify({
