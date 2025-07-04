@@ -1,73 +1,123 @@
-# Welcome to your Lovable project
+🔥 Let’s gooo Jeff — deployed on Vercel and up on GitHub? You’re crushing it!
 
-## Project info
+Here's your updated **final `README.md`**, now including:
 
-**URL**: https://lovable.dev/projects/aeb75ec6-c5b5-4308-83d2-1118af5ca825
+* ✅ Your **live Vercel link**
+* ✅ Your **GitHub repo**
+* ✅ Clean credits
+* ✅ Ready to impress hackathon judges, investors, or anyone stumbling on your repo
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ✅ FINAL `README.md` (copy this into your repo)
 
-**Use Lovable**
+````markdown
+# 🎨 Postify — AI-Powered Poster Maker for Hustlers
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/aeb75ec6-c5b5-4308-83d2-1118af5ca825) and start prompting.
+**Postify** is a sleek AI web app that helps Kenyan hustlers, small businesses, and solopreneurs design stunning promotional posters in seconds — no design skills required.
 
-Changes made via Lovable will be committed automatically to this repo.
+Built with **GPT-4**, **DALL·E**, and **Supabase**, Postify transforms a simple promo idea into a downloadable, share-ready poster. From shop owners to side hustlers, anyone can create professional designs with just a few clicks.
 
-**Use your preferred IDE**
+🔗 **Live Demo** → [https://postify-kenyan-app.vercel.app](https://postify-kenyan-app.vercel.app)  
+📂 **GitHub Repo** → [github.com/Mbitajeff/Postify-Kenyan-App](https://github.com/Mbitajeff/Postify-Kenyan-App)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📸 Demo
 
-Follow these steps:
+![Postify Screenshot](./homepage.png)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚀 Features
 
-# Step 3: Install the necessary dependencies.
-npm i
+- 📝 **AI Promo Text** – GPT-4 generates catchy, professional marketing lines.
+- 🖼️ **AI Visuals** – DALL·E creates beautiful poster backgrounds.
+- 🎨 **Theme Selector** – Vibrant, Minimal, or Bold options.
+- 👁️ **Live Preview** – See your poster as you build it.
+- ⬇️ **Download Option** – Instant download for use on social media or print.
+- 💾 **Supabase Integration** – Posters are saved in real-time to the cloud.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+---
+
+## 💼 Built For
+
+- Hairdressers & Barbers
+- Food Vendors & Small Shops
+- Tutors, Fundis & Freelancers
+- Anyone with a product, a promo, and hustle energy
+
+---
+
+## 🤑 Monetization Model
+
+- 💰 Pay-per-download (KES 50–100)
+- 📦 Unlimited plan (KES 300/month)
+- 🔜 Add-ons: Printing, SMS promos, WhatsApp distribution
+
+---
+
+## 🛠 Tech Stack
+
+| Tech             | Purpose                        |
+|------------------|--------------------------------|
+| React + Tailwind | Frontend UI                    |
+| GPT-4 (OpenAI)   | Marketing text generation      |
+| DALL·E 3         | Poster image generation        |
+| Supabase         | Poster storage + backend API   |
+| Vercel           | Hosting + CI/CD                |
+
+---
+
+## 🌍 Why Postify?
+
+Kenya has over **7.4M informal businesses**, most without access to design tools or professional designers.  
+Postify gives them the power to create, promote, and grow — instantly and affordably.
+
+---
+
+## 📦 Getting Started Locally
+
+```bash
+git clone https://github.com/Mbitajeff/Postify-Kenyan-App.git
+cd Postify-Kenyan-App
+npm install
 npm run dev
+````
+
+---
+
+## 🧠 Environment Variables
+
+Create a `.env` file in the root folder:
+
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your_anon_public_key
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🤝 Contributing
 
-**Use GitHub Codespaces**
+Pull requests welcome — help empower hustlers across Africa 🇰🇪💡
+Fork it. Build it. Share it. Let’s grow this together.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 👋 Author
 
-This project is built with:
+Built with ❤️ by [Jeff Mbita](https://github.com/Mbitajeff)
+🎯 For the Vibe Coding Hackathon 2.0 — *From Idea to Income*
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## 📢 License
 
-Simply open [Lovable](https://lovable.dev/projects/aeb75ec6-c5b5-4308-83d2-1118af5ca825) and click on Share -> Publish.
+MIT — Free for personal & commercial use. Just give credit ✨
 
-## Can I connect a custom domain to my Lovable project?
+```
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### ✅ Final Touch Checklist
