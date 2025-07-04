@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Download, Wand2, ImageIcon } from "lucide-react";
+import { Loader2, Download, Wand2, ImageIcon, LogOut } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import ThemeSelector from "../components/ThemeSelector";
 import PosterPreview from "../components/PosterPreview";
-import { generatePromoContent } from "../services/aiService";
 
 interface Theme {
   id: string;
@@ -24,6 +25,7 @@ interface Theme {
 }
 
 const Index = () => {
+  const { user, signOut } = useAuth();
   const [business_type, setBusiness_type] = useState('');
   const [promo_text, setPromo_text] = useState('');
   const [theme, setTheme] = useState<Theme | null>(null);
@@ -39,9 +41,8 @@ const Index = () => {
 
     setIsGenerating(true);
     try {
-      // For now, we'll use demo content since API key setup is complex
-      // In production, this would connect to your AI service
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Demo generated content
       const demoPromoLines = [
@@ -63,7 +64,24 @@ const Index = () => {
       
       setPromo_line(randomPromo);
       setPoster_image(randomImage);
-      toast.success("Poster generated successfully!");
+
+      // Save to Supabase
+      const { error } = await supabase
+        .from('posters')
+        .insert({
+          user_id: user?.id,
+          business_type,
+          promo_text,
+          gpt_text: randomPromo,
+          image_url: randomImage
+        });
+
+      if (error) {
+        console.error('Error saving poster:', error);
+        toast.error("Failed to save poster");
+      } else {
+        toast.success("Poster generated and saved!");
+      }
     } catch (error) {
       console.error('Generation error:', error);
       toast.error("Failed to generate poster. Please try again.");
@@ -82,6 +100,11 @@ const Index = () => {
     window.dispatchEvent(event);
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Signed out successfully");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <div className="container mx-auto px-4 py-8">
@@ -98,6 +121,20 @@ const Index = () => {
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
             Create stunning promotional posters for your business in seconds
           </p>
+          
+          {/* User info and sign out */}
+          <div className="mt-4 flex items-center justify-center gap-4 text-slate-400">
+            <span>Welcome, {user?.email}</span>
+            <Button
+              onClick={handleSignOut}
+              variant="outline"
+              size="sm"
+              className="border-slate-600 text-slate-300 hover:bg-slate-700"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">

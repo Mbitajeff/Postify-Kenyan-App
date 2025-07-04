@@ -17,6 +17,7 @@ export type Database = {
           id: number
           image_url: string | null
           promo_text: string | null
+          user_id: string | null
         }
         Insert: {
           business_type?: string | null
@@ -25,6 +26,7 @@ export type Database = {
           id?: number
           image_url?: string | null
           promo_text?: string | null
+          user_id?: string | null
         }
         Update: {
           business_type?: string | null
@@ -33,6 +35,7 @@ export type Database = {
           id?: number
           image_url?: string | null
           promo_text?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
