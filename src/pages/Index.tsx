@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,46 +40,45 @@ const Index = () => {
 
     setIsGenerating(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Demo generated content
-      const demoPromoLines = [
-        "Haiya! This deal is too sweet to miss! 🔥",
-        "Uko ready for this fire offer? Let's go!",
-        "Bro, this promo will shock you! 😱",
-        "Eish, this deal is absolutely crazy!",
-        "Msee, don't sleep on this offer!"
-      ];
-      
-      const demoImages = [
-        "https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
-        "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1126&q=80"
-      ];
-      
-      const randomPromo = demoPromoLines[Math.floor(Math.random() * demoPromoLines.length)];
-      const randomImage = demoImages[Math.floor(Math.random() * demoImages.length)];
-      
-      setPromo_line(randomPromo);
-      setPoster_image(randomImage);
+      // Call the Supabase edge function to generate poster
+      const { data, error } = await supabase.functions.invoke('generate-poster', {
+        body: {
+          business_type: business_type.trim(),
+          promo_text: promo_text.trim(),
+          theme: theme
+        }
+      });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        toast.error("Failed to generate poster. Please try again.");
+        return;
+      }
+
+      if (!data || !data.promo_line || !data.image_url) {
+        toast.error("Invalid response from poster generation service");
+        return;
+      }
+
+      setPromo_line(data.promo_line);
+      setPoster_image(data.image_url);
 
       // Save to Supabase
-      const { error } = await supabase
+      const { error: saveError } = await supabase
         .from('posters')
         .insert({
           user_id: user?.id,
           business_type,
           promo_text,
-          gpt_text: randomPromo,
-          image_url: randomImage
+          gpt_text: data.promo_line,
+          image_url: data.image_url
         });
 
-      if (error) {
-        console.error('Error saving poster:', error);
-        toast.error("Failed to save poster");
+      if (saveError) {
+        console.error('Error saving poster:', saveError);
+        toast.error("Poster generated but failed to save");
       } else {
-        toast.success("Poster generated and saved!");
+        toast.success("Amazing poster created! 🎉");
       }
     } catch (error) {
       console.error('Generation error:', error);
